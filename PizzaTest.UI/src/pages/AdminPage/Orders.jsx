@@ -13,6 +13,7 @@ import {
   Collapse,
   IconButton,
   Button,
+  TextField,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -90,8 +91,12 @@ function Row({ order }) {
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -100,6 +105,7 @@ export default function Orders() {
       try {
         const response = await orderService.getOrders();
         setOrders(response.data);
+        setFilteredOrders(response.data);
       } catch (err) {
         setError("Siparişler alınırken hata oluştu.");
       } finally {
@@ -110,11 +116,28 @@ export default function Orders() {
     fetchOrders();
   }, []);
 
+  const handleFilter = () => {
+    if (!startDate || !endDate) {
+      setFilteredOrders(orders);
+      return;
+    }
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    end.setHours(23, 59, 59, 999);
+
+    const filtered = orders.filter((order) => {
+      const orderDate = new Date(order.orderDate);
+      return orderDate >= start && orderDate <= end;
+    });
+
+    setFilteredOrders(filtered);
+  };
+
   const exportToExcel = () => {
-    // Siparişler ve her siparişin ürünleri için satır oluştur
     const excelData = [];
 
-    orders.forEach((order) => {
+    filteredOrders.forEach((order) => {
       order.orderDetails.forEach((item) => {
         excelData.push({
           "Sipariş ID": order.id,
@@ -155,6 +178,45 @@ export default function Orders() {
 
   return (
     <>
+      <Box
+        display="flex"
+        justifyContent="center"
+        gap={2}
+        alignItems="center"
+        mt={2}
+      >
+        <TextField
+          label="Başlangıç Tarihi"
+          type="date"
+          InputLabelProps={{ shrink: true }}
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+        <TextField
+          label="Bitiş Tarihi"
+          type="date"
+          InputLabelProps={{ shrink: true }}
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+          inputProps={{
+            min: startDate || undefined,
+          }}
+        />
+        <Button variant="contained" onClick={handleFilter}>
+          Filtrele
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            setStartDate("");
+            setEndDate("");
+            setFilteredOrders(orders);
+          }}
+        >
+          Temizle
+        </Button>
+      </Box>
+
       <TableContainer
         component={Paper}
         style={{ maxWidth: 1200, margin: "auto", marginTop: 20 }}
@@ -177,18 +239,21 @@ export default function Orders() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {orders.length === 0 ? (
+            {filteredOrders.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={9} align="center">
                   Sipariş bulunamadı.
                 </TableCell>
               </TableRow>
             ) : (
-              orders.map((order) => <Row key={order.id} order={order} />)
+              filteredOrders.map((order) => (
+                <Row key={order.id} order={order} />
+              ))
             )}
           </TableBody>
         </Table>
       </TableContainer>
+
       <Box display="flex" justifyContent="center" mt={2}>
         <Button variant="contained" color="success" onClick={exportToExcel}>
           Excel'e Aktar

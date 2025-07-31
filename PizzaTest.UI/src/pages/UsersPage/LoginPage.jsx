@@ -108,6 +108,17 @@ export default function LoginPage() {
           >
             {isLoading ? "Giriş Yapılıyor..." : "Giriş Yap"}
           </Button>
+          <Typography>
+            {" "}
+            Hesabınız yok mu ?{" "}
+            <Button
+              size="small"
+              sx={{ m: 1 }}
+              onClick={() => navigate("/auth/register")}
+            >
+              kayıt ol
+            </Button>
+          </Typography>
         </Box>
       </form>
     </Box>
