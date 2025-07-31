@@ -31,6 +31,11 @@ namespace PizzaTest.Business.Concrete
             return _productsDal.GetList();
         }
 
+        public List<Products> TGetProductsWithCategory()
+        {
+          return  _productsDal.GetProductsWithCategory();
+        }
+
         public void TInsert(Products t)
         {
             _productsDal.Insert(t);

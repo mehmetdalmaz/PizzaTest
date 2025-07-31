@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PizzaTest.Business.Abstract;
@@ -9,6 +10,7 @@ namespace PizzaTest.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
@@ -52,7 +54,7 @@ namespace PizzaTest.API.Controllers
             var categoryDto = _mapper.Map<ResultCategoryDto>(category);
             return Ok(categoryDto);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Create([FromBody] CreateCategoryDto createCategoryDto)
         {
@@ -65,6 +67,7 @@ namespace PizzaTest.API.Controllers
             return Ok("Kategori başarıyla eklendi.");
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] UpdateCategoryDto updateCategoryDto)
         {
@@ -80,6 +83,9 @@ namespace PizzaTest.API.Controllers
             _categoryService.TUpdate(category);
             return Ok("Kategori başarıyla güncellendi.");
         }
+
+
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
