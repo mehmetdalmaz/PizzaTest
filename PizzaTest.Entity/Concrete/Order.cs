@@ -9,14 +9,13 @@ namespace PizzaTest.Entity.Concrete
     public class Order
     {
         public int ID { get; set; }
-        public string? UserId { get; set; }
-        public int UserAddressID { get; set; }
-        public int UserPaymentCardID { get; set; }
+        public int UserID { get; set; }
+        public int AddressID { get; set; }
 
         public DateTime OrderDate { get; set; } = DateTime.Now;
-        public OrderStatus Status { get; set; } = OrderStatus.Pending;
+        public DateTime? DeliveryDate { get; set; } = DateTime.Now.AddDays(2);
         public decimal TotalPrice { get; set; }
-        public string? OrderNote { get; set; }
+        public string OrderNote { get; set; }
 
 
         public Address Address { get; set; }

@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36301.6 d17.14
+VisualStudioVersion = 17.14.36301.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaTest.API", "PizzaTest.API\PizzaTest.API.csproj", "{BCCF65AC-D699-4483-BFA0-4BE9C7F72CE0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaTest.UI", "PizzaTest.UI\PizzaTest.UI.csproj", "{345492F9-9D13-4B95-BAEF-897EFE912C51}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaTest.Entity", "PizzaTest.Entity\PizzaTest.Entity.csproj", "{012468C5-5950-4207-AE77-51D3EF2CED18}"
 EndProject
@@ -25,10 +23,6 @@ Global
 		{BCCF65AC-D699-4483-BFA0-4BE9C7F72CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCCF65AC-D699-4483-BFA0-4BE9C7F72CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCCF65AC-D699-4483-BFA0-4BE9C7F72CE0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{345492F9-9D13-4B95-BAEF-897EFE912C51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{345492F9-9D13-4B95-BAEF-897EFE912C51}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{345492F9-9D13-4B95-BAEF-897EFE912C51}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{345492F9-9D13-4B95-BAEF-897EFE912C51}.Release|Any CPU.Build.0 = Release|Any CPU
 		{012468C5-5950-4207-AE77-51D3EF2CED18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{012468C5-5950-4207-AE77-51D3EF2CED18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{012468C5-5950-4207-AE77-51D3EF2CED18}.Release|Any CPU.ActiveCfg = Release|Any CPU

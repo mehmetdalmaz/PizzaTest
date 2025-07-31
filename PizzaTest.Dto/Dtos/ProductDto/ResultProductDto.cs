@@ -1,5 +1,4 @@
-﻿using ShopHub.Entity.Concrete;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +15,5 @@ namespace PizzaTest.Dto.Dtos.ProductDto
         public int StockQuantity { get; set; }
         public int CategoryID { get; set; }
         public string? CategoryName { get; set; }
-
-
     }
 }

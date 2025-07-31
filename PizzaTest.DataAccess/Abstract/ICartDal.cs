@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PizzaTest.Entity.Concrete;
 
 namespace PizzaTest.DataAccess.Abstract
 {
     public interface ICartDal : IGenericDal<Cart>
     {
-       
+        Cart? GetCartWithItems(int userID);
     }
 }

@@ -8,6 +8,6 @@ namespace PizzaTest.Dto.Dtos.CartDto
 {
     public class CreateCartDto
     {
-        public string UserId { get; set; }
+        public int UserID { get; set; }
     }
 }

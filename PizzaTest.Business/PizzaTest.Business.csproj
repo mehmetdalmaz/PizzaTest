@@ -7,20 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="15.0.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
-    <PackageReference Include="FluentValidation" Version="8.6.3" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\PizzaTest.DataAccess\PizzaTest.DataAccess.csproj" />
     <ProjectReference Include="..\PizzaTest.Dto\PizzaTest.Dto.csproj" />
     <ProjectReference Include="..\PizzaTest.Entity\PizzaTest.Entity.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Concrete\" />
-    <Folder Include="Abstract\" />
   </ItemGroup>
 
 </Project>

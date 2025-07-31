@@ -1,5 +1,4 @@
-﻿using ShopHub.Dto.Dtos.OrderDetailDto;
-using ShopHub.Entity.Enum;
+﻿using PizzaTest.Dto.Dtos.OrderDetailDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +9,8 @@ namespace PizzaTest.Dto.Dtos.OrderDto
 {
     public class CreateOrderDto
     {
-        public string? UserId { get; set; }
         public int AddressID { get; set; }
-        public decimal TotalPrice { get; set; }
         public string OrderNote { get; set; }
 
-        public List<CreateOrderDetailDto> OrderDetails { get; set; }
     }
 }
