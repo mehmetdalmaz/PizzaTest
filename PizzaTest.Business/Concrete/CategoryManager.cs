@@ -23,7 +23,7 @@ namespace PizzaTest.Business.Concrete
 
         public List<Category> TGetList()
         {
-            return _categoryDal.GetList();
+            return _categoryDal.TGetCategoriesWithProducts();
         }
 
         public void TInsert(Category t)

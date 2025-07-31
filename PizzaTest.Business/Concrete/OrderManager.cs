@@ -94,7 +94,7 @@ namespace PizzaTest.Business.Concrete
 
         public List<Order> TGetList()
         {
-            return _orderDal.GetList();
+            return _orderDal.GetAllOrderAdmin();
         }
 
         public void TInsert(Order t)

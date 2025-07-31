@@ -10,7 +10,7 @@ namespace PizzaTest.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+
 
     public class ProductController : ControllerBase
     {
@@ -53,7 +53,7 @@ namespace PizzaTest.API.Controllers
             return Ok(productDto);
         }
 
-        [Authorize(Roles = "Admin")]
+
         [HttpPost]
         public IActionResult Create([FromBody] CreateProductDto createProductDto)
         {
@@ -66,7 +66,7 @@ namespace PizzaTest.API.Controllers
             return Ok("Ürün başarıyla eklendi.");
         }
 
-        [Authorize(Roles = "Admin")]
+
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] UpdateProductDto updateProductDto)
         {
@@ -84,7 +84,7 @@ namespace PizzaTest.API.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

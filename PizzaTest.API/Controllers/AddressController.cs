@@ -11,7 +11,6 @@ namespace PizzaTest.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class AddressController : ControllerBase
     {
         private readonly IAddressService _addressService;

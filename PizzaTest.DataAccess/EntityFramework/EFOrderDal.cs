@@ -25,6 +25,7 @@ namespace PizzaTest.DataAccess.EntityFramework
             .Include(x => x.OrderDetails)
                 .ThenInclude(oi => oi.Product)
             .Include(x => x.Address)
+            .Include(x => x.User)
             .ToList();
         }
 

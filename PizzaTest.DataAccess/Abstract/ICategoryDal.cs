@@ -9,6 +9,6 @@ namespace PizzaTest.DataAccess.Abstract
 {
     public interface ICategoryDal : IGenericDal<Category>
     {
-        
+        List<Category> TGetCategoriesWithProducts();
     }
 }

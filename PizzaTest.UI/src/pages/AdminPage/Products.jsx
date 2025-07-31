@@ -37,6 +37,7 @@ function ProductRow({ product, onEdit, onDelete }) {
           </IconButton>
         </TableCell>
         <TableCell>{product.id}</TableCell>
+        <TableCell>{product.categoryName}</TableCell>
         <TableCell>{product.name}</TableCell>
         <TableCell>{product.price.toFixed(2)} ₺</TableCell>
         <TableCell align="right">
@@ -202,6 +203,7 @@ export default function Products() {
             <TableRow>
               <TableCell />
               <TableCell>ID</TableCell>
+              <TableCell>Kategori Adı</TableCell>
               <TableCell>Ürün Adı</TableCell>
               <TableCell>Fiyat</TableCell>
               <TableCell align="right">İşlemler</TableCell>

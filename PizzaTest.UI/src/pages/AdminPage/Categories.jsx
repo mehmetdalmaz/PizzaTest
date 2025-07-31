@@ -15,7 +15,16 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Collapse,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  IconButton,
 } from "@mui/material";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { categoryService } from "../../services/categoryService";
 
 export default function Categories() {
@@ -28,6 +37,9 @@ export default function Categories() {
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+
+  // Yeni state: hangi kategorilerin ürün detaylarının açık olduğunu tutar
+  const [openCategoryIds, setOpenCategoryIds] = useState([]);
 
   const fetchCategories = async () => {
     setLoading(true);
@@ -59,7 +71,6 @@ export default function Categories() {
 
     try {
       if (editingId !== null) {
-        // id'yi body'ye ekliyoruz
         await categoryService.updateCategory(editingId, {
           id: editingId,
           ...form,
@@ -106,8 +117,17 @@ export default function Categories() {
     setEditingId(null);
   };
 
+  // Kategori satırına tıklayınca ürün detaylarını aç/kapa
+  const toggleCategoryOpen = (categoryId) => {
+    setOpenCategoryIds((prev) =>
+      prev.includes(categoryId)
+        ? prev.filter((id) => id !== categoryId)
+        : [...prev, categoryId]
+    );
+  };
+
   return (
-    <Box sx={{ maxWidth: 600, mx: "auto", mt: 4, p: 2 }}>
+    <Box sx={{ maxWidth: 700, mx: "auto", mt: 4, p: 2 }}>
       <Typography variant="h4" component="h2" gutterBottom>
         Kategoriler
       </Typography>
@@ -126,33 +146,89 @@ export default function Categories() {
       <Paper sx={{ mb: 3 }}>
         <List>
           {categories.map((cat) => (
-            <ListItem
-              key={cat.id}
-              secondaryAction={
-                <Stack direction="row" spacing={1}>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    onClick={() => handleEdit(cat)}
-                  >
-                    Düzenle
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    size="small"
-                    onClick={() => confirmDelete(cat.id)}
-                  >
-                    Sil
-                  </Button>
-                </Stack>
-              }
-            >
-              <ListItemText
-                primary={<strong>{cat.name}</strong>}
-                secondary={cat.description}
-              />
-            </ListItem>
+            <React.Fragment key={cat.id}>
+              <ListItem
+                button
+                onClick={() => toggleCategoryOpen(cat.id)}
+                secondaryAction={
+                  <Stack direction="row" spacing={1}>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEdit(cat);
+                      }}
+                    >
+                      Düzenle
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      size="small"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        confirmDelete(cat.id);
+                      }}
+                    >
+                      Sil
+                    </Button>
+                    <IconButton
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleCategoryOpen(cat.id);
+                      }}
+                      size="small"
+                    >
+                      {openCategoryIds.includes(cat.id) ? (
+                        <KeyboardArrowUpIcon />
+                      ) : (
+                        <KeyboardArrowDownIcon />
+                      )}
+                    </IconButton>
+                  </Stack>
+                }
+              >
+                <ListItemText
+                  primary={<strong>{cat.name}</strong>}
+                  secondary={cat.description}
+                />
+              </ListItem>
+
+              {/* Ürün Detaylarını açılır olarak göster */}
+              <Collapse
+                in={openCategoryIds.includes(cat.id)}
+                timeout="auto"
+                unmountOnExit
+              >
+                <Box sx={{ pl: 4, pb: 2 }}>
+                  {cat.products && cat.products.length > 0 ? (
+                    <Table size="small" aria-label="products table">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Ürün Adı</TableCell>
+                          <TableCell>Fiyat (₺)</TableCell>
+                          <TableCell>Stok Adedi</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {cat.products.map((product) => (
+                          <TableRow key={product.id}>
+                            <TableCell>{product.name}</TableCell>
+                            <TableCell>{product.price.toFixed(2)}</TableCell>
+                            <TableCell>{product.stockQuantity}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  ) : (
+                    <Typography variant="body2" color="text.secondary">
+                      Bu kategoriye ait ürün bulunmamaktadır.
+                    </Typography>
+                  )}
+                </Box>
+              </Collapse>
+            </React.Fragment>
           ))}
         </List>
       </Paper>
@@ -197,7 +273,6 @@ export default function Categories() {
         </Stack>
       </Box>
 
-      {/* Silme Onay Diyaloğu */}
       <Dialog
         open={deleteDialogOpen}
         onClose={() => setDeleteDialogOpen(false)}

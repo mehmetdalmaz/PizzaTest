@@ -12,7 +12,7 @@ namespace PizzaTest.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+
 
     public class OrderController : ControllerBase
     {
@@ -35,7 +35,7 @@ namespace PizzaTest.API.Controllers
         }
 
         [HttpGet("getall")]
-        [Authorize(Roles = "Admin")]
+
         public ActionResult<List<ResultOrderDto>> GetAllOrders()
         {
             var orders = _orderService.TGetList();
@@ -43,7 +43,7 @@ namespace PizzaTest.API.Controllers
             return Ok(resultOrderDto);
         }
 
-        [Authorize]
+
         [HttpPost("create")]
         public IActionResult CreateOrder(CreateOrderDto createOrderDto)
         {

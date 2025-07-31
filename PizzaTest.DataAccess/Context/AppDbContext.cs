@@ -12,10 +12,21 @@ namespace PizzaTest.DataAccess.Context
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
+
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Order>()
+            .HasOne(o => o.User)
+            .WithMany(u => u.Orders)
+            .HasForeignKey(o => o.UserID)
+            .OnDelete(DeleteBehavior.Restrict); 
 
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Address)
+                .WithMany()
+                .HasForeignKey(o => o.AddressID)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public DbSet<Cart> Carts { get; set; }

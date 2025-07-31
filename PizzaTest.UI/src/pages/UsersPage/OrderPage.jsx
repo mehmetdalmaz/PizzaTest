@@ -16,8 +16,10 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { addressService } from "../../services/addressService";
 import { orderService } from "../../services/orderService";
+import { useNavigate } from "react-router";
 
 export default function OrderPage() {
+  const navigate = useNavigate();
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedAddressId, setSelectedAddressId] = useState("");
@@ -103,6 +105,7 @@ export default function OrderPage() {
       });
 
       alert("Sipariş başarıyla oluşturuldu!");
+      navigate("/home");
       setOrderNote("");
     } catch (error) {
       console.error("Sipariş oluşturulamadı", error);

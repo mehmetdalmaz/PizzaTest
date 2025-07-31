@@ -18,6 +18,7 @@ namespace PizzaTest.Entity.Concrete
         public string OrderNote { get; set; }
 
 
+        public User User { get; set; }
         public Address Address { get; set; }
         public ICollection<OrderDetails> OrderDetails { get; set; }
 
