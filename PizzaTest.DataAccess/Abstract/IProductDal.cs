@@ -9,6 +9,8 @@ namespace PizzaTest.DataAccess.Abstract
 {
     public interface IProductDal : IGenericDal<Products>
     {
+        List<Products> GetProductsWithCategory();
+
     }
 }
 

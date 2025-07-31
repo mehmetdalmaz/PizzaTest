@@ -1,6 +1,7 @@
 using HotelProject.WebUI.Mapping;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using PizzaTest.API.Models;
 using PizzaTest.API.Services;
 using PizzaTest.Business.Abstract;
 using PizzaTest.Business.Concrete;
@@ -120,6 +121,13 @@ builder.Services.AddAuthentication("Bearer")
 
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.Migrate(); 
+    DataSeeder.SeedAdminUser(dbContext); 
+}
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

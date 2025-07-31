@@ -9,6 +9,6 @@ namespace PizzaTest.Business.Abstract
 {
     public interface IProductService : IGenericService<Products>
     {
-       
+        List<Products> TGetProductsWithCategory();
     }
 }

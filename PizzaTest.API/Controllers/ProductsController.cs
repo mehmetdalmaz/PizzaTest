@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PizzaTest.Business.Abstract;
@@ -9,6 +10,8 @@ namespace PizzaTest.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -28,13 +31,10 @@ namespace PizzaTest.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var products = _productService.TGetList();
-            if (products == null || !products.Any())
-            {
-                return NotFound("Ürünler yok.");
-            }
+            var products = _productService.TGetProductsWithCategory(); 
             var productDtos = _mapper.Map<List<ResultProductDto>>(products);
             return Ok(productDtos);
+
         }
 
         [HttpGet("{id}")]
@@ -53,6 +53,7 @@ namespace PizzaTest.API.Controllers
             return Ok(productDto);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Create([FromBody] CreateProductDto createProductDto)
         {
@@ -65,6 +66,7 @@ namespace PizzaTest.API.Controllers
             return Ok("Ürün başarıyla eklendi.");
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] UpdateProductDto updateProductDto)
         {
@@ -80,6 +82,9 @@ namespace PizzaTest.API.Controllers
             _productService.TUpdate(product);
             return Ok("Ürün başarıyla güncellendi.");
         }
+
+
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
