@@ -117,18 +117,33 @@ export default function Orders() {
   }, []);
 
   const handleFilter = () => {
-    if (!startDate || !endDate) {
+    if (!startDate && !endDate) {
       setFilteredOrders(orders);
       return;
     }
 
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    end.setHours(23, 59, 59, 999);
-
     const filtered = orders.filter((order) => {
       const orderDate = new Date(order.orderDate);
-      return orderDate >= start && orderDate <= end;
+
+      if (startDate && !endDate) {
+        const start = new Date(startDate);
+        return orderDate >= start;
+      }
+
+      if (!startDate && endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        return orderDate <= end;
+      }
+
+      if (startDate && endDate) {
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        return orderDate >= start && orderDate <= end;
+      }
+
+      return true;
     });
 
     setFilteredOrders(filtered);
