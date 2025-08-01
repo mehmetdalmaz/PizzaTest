@@ -52,7 +52,7 @@ export default function AdminLoginPage() {
         }
 
         localStorage.setItem("token", token);
-        navigate("/admin-panel/home");
+        navigate("/web/admin-panel/home");
       } else {
         setLoginError("Email veya şifre hatalı.");
       }

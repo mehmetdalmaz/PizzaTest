@@ -9,5 +9,7 @@ namespace PizzaTest.Business.Abstract
 {
     public interface IAddressService : IGenericService<Address>
     {
+        List<Address> TGetListByUserId(int userId);
+
     }
 }

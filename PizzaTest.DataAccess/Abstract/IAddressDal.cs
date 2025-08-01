@@ -9,5 +9,7 @@ namespace PizzaTest.DataAccess.Abstract
 {
     public interface IAddressDal : IGenericDal<Address>
     {
+        List<Address> GetListByUserId(int userId);
+
     }
 }

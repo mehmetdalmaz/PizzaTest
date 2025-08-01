@@ -38,17 +38,14 @@ export default function CartDrawer({ open, onClose, cart, setCart }) {
     }
   };
 
-  const toplamAdet = cart.reduce(
-    (acc, item) => acc +   item.quantity, 0,
-    0
-  );
+  const toplamAdet = cart.reduce((acc, item) => acc + item.quantity, 0, 0);
 
   const handleCheckout = () => {
     if (cart.length === 0) {
       alert("Sepetinizde ürün yok.");
       return;
     } else {
-      navigate("/order");
+      navigate("/web/order");
       onClose();
     }
   };

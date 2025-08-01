@@ -43,7 +43,7 @@ export default function LoginPage() {
 
       if (token) {
         localStorage.setItem("token", token);
-        navigate("/home");
+        navigate("/web/home");
       } else {
         setLoginError("Email veya şifre hatalı.");
       }
@@ -114,7 +114,7 @@ export default function LoginPage() {
             <Button
               size="small"
               sx={{ m: 1 }}
-              onClick={() => navigate("/auth/register")}
+              onClick={() => navigate("/web/auth/register")}
             >
               kayıt ol
             </Button>

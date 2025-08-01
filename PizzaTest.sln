@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaTest.Business", "Pizza
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaTest.Dto", "PizzaTest.Dto\PizzaTest.Dto.csproj", "{961A018C-3263-457D-B041-FC293CC581EE}"
 EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "pizzatest.ui", "PizzaTest.Ui\pizzatest.ui.esproj", "{DE30FB90-A7FD-85FB-BB8B-7724F5C2B779}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,12 @@ Global
 		{961A018C-3263-457D-B041-FC293CC581EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{961A018C-3263-457D-B041-FC293CC581EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{961A018C-3263-457D-B041-FC293CC581EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE30FB90-A7FD-85FB-BB8B-7724F5C2B779}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE30FB90-A7FD-85FB-BB8B-7724F5C2B779}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE30FB90-A7FD-85FB-BB8B-7724F5C2B779}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{DE30FB90-A7FD-85FB-BB8B-7724F5C2B779}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE30FB90-A7FD-85FB-BB8B-7724F5C2B779}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE30FB90-A7FD-85FB-BB8B-7724F5C2B779}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

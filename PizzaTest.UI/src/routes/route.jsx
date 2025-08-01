@@ -17,15 +17,15 @@ const isLoggedIn = !!localStorage.getItem("token");
 
 export const route = createBrowserRouter([
   {
-    path: "/",
+    path: "/web/",
     element: <MainLayout />,
     children: [
       {
         index: true,
         element: isLoggedIn ? (
-          <Navigate to="/home" />
+          <Navigate to="/web/home" />
         ) : (
-          <Navigate to="/auth/login" />
+          <Navigate to="/web/auth/login" />
         ),
       },
       {
@@ -48,10 +48,10 @@ export const route = createBrowserRouter([
     ],
   },
 
-  { path: "/admin", element: <AdminLoginPage /> },
+  { path: "/web/admin", element: <AdminLoginPage /> },
 
   {
-    path: "/admin-panel",
+    path: "/web/admin-panel",
     element: <AdminLayout />,
     children: [
       { path: "home", element: <AdminHomePage /> },

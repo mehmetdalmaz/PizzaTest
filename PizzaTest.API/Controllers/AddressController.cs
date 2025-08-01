@@ -6,6 +6,7 @@ using PizzaTest.Business.Abstract;
 using PizzaTest.Dto.Dtos.AddressDto;
 using PizzaTest.Dto.Dtos.ProductDto;
 using PizzaTest.Entity.Concrete;
+using System.Security.Claims;
 
 namespace PizzaTest.API.Controllers
 {
@@ -20,6 +21,15 @@ namespace PizzaTest.API.Controllers
         {
             _addressService = addressService;
             _mapper = mapper;
+        }
+
+        private int GetUserId()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+                throw new UnauthorizedAccessException("Token geçersiz veya kullanıcı doğrulanmamış.");
+
+            return int.Parse(userIdClaim.Value);
         }
 
         [HttpGet]
@@ -42,6 +52,7 @@ namespace PizzaTest.API.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
+            
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -53,6 +64,23 @@ namespace PizzaTest.API.Controllers
             }
             var addressDto = _mapper.Map<ResultUserAddressDto>(address);
             return Ok(addressDto);
+        }
+
+        [HttpGet("user")]
+        public IActionResult GetByUserId()
+        {
+            var userID = GetUserId();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var addresses = _addressService.TGetListByUserId(userID);
+            if (addresses == null)
+            {
+                return NotFound("Kullanıcıya ait adresler bulunamadı.");
+            }
+            var addressDtos = _mapper.Map<List<ResultUserAddressDto>>(addresses);
+            return Ok(addressDtos);
         }
 
         [HttpPost]

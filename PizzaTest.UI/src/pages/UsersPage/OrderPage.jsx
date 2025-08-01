@@ -38,7 +38,7 @@ export default function OrderPage() {
     const fetchAddresses = async () => {
       setLoading(true);
       try {
-        const res = await addressService.getAllAddresses();
+        const res = await addressService.getAddressByUserId();
         setAddresses(res.data || []);
         if (res.data.length > 0)
           setSelectedAddressId(res.data[0].id.toString());

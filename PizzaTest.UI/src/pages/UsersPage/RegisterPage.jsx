@@ -128,7 +128,7 @@ export default function RegisterPage() {
             <Button
               size="small"
               sx={{ m: 1 }}
-              onClick={() => navigate("/auth/login")}
+              onClick={() => navigate("/web/auth/login")}
             >
               giriş yap
             </Button>

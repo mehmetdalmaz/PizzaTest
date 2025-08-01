@@ -31,6 +31,11 @@ namespace PizzaTest.Business.Concrete
             return _addressDal.GetList();
         }
 
+        public List<Address> TGetListByUserId(int userId)
+        {
+            return _addressDal.GetListByUserId(userId);
+        }
+
         public void TInsert(Address t)
         {
             _addressDal.Insert(t);
