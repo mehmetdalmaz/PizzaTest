@@ -82,7 +82,14 @@ export default function Products() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const [form, setForm] = useState({ name: "", description: "", price: "" });
+const [form, setForm] = useState({
+  name: "",
+  description: "",
+  price: "",
+  imageUrl: "",
+  stockQuantity: "",
+  categoryID: "",
+});
   const [editingId, setEditingId] = useState(null);
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -109,44 +116,62 @@ export default function Products() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!form.name.trim()) {
-      alert("Ürün adı zorunlu");
-      return;
+  if (!form.name.trim()) {
+    alert("Ürün adı zorunlu");
+    return;
+  }
+
+  if (!form.price || isNaN(form.price) || Number(form.price) < 0) {
+    alert("Geçerli bir fiyat giriniz");
+    return;
+  }
+
+  if (!form.categoryID || isNaN(form.categoryID)) {
+    alert("Geçerli bir kategori ID giriniz");
+    return;
+  }
+
+  try {
+    const payload = {
+      name: form.name,
+      description: form.description,
+      price: parseFloat(form.price),
+      imageUrl: form.imageUrl,
+      stockQuantity: parseInt(form.stockQuantity),
+      categoryID: parseInt(form.categoryID),
+    };
+
+    if (editingId !== null) {
+      await productService.updateProduct(editingId, {
+        id: editingId,
+        ...payload,
+      });
+      alert("Ürün güncellendi.");
+    } else {
+      await productService.addProduct(payload);
+      alert("Ürün eklendi.");
     }
 
-    if (!form.price || isNaN(form.price) || Number(form.price) < 0) {
-      alert("Geçerli bir fiyat giriniz");
-      return;
-    }
+    // Formu temizle
+    setForm({
+      name: "",
+      description: "",
+      price: "",
+      imageUrl: "",
+      stockQuantity: "",
+      categoryID: "",
+    });
+    setEditingId(null);
+    fetchProducts();
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+    alert("İşlem başarısız oldu.");
+  }
+};
 
-    try {
-      const payload = {
-        name: form.name,
-        description: form.description,
-        price: parseFloat(form.price),
-      };
-
-      if (editingId !== null) {
-        await productService.updateProduct(editingId, {
-          id: editingId,
-          ...payload,
-        });
-        alert("Ürün güncellendi.");
-      } else {
-        await productService.addProduct(payload);
-        alert("Ürün eklendi.");
-      }
-      setForm({ name: "", description: "", price: "" });
-      setEditingId(null);
-      fetchProducts();
-    } catch (error) {
-      console.error(error.response?.data || error.message);
-      alert("İşlem başarısız oldu.");
-    }
-  };
 
   const confirmDelete = (id) => {
     setDeleteId(id);
@@ -166,19 +191,31 @@ export default function Products() {
     }
   };
 
-  const handleEdit = (product) => {
-    setForm({
-      name: product.name || "",
-      description: product.description || "",
-      price: product.price ? product.price.toString() : "",
-    });
-    setEditingId(product.id);
-  };
+const handleEdit = (product) => {
+  setForm({
+    name: product.name || "",
+    description: product.description || "",
+    price: product.price?.toString() || "",
+    imageUrl: product.imageUrl || "",
+    stockQuantity: product.stockQuantity?.toString() || "",
+    categoryID: product.categoryID?.toString() || "",
+  });
+  setEditingId(product.id);
+};
 
-  const handleCancel = () => {
-    setForm({ name: "", description: "", price: "" });
-    setEditingId(null);
-  };
+
+const handleCancel = () => {
+  setForm({
+    name: "",
+    description: "",
+    price: "",
+    imageUrl: "",
+    stockQuantity: "",
+    categoryID: "",
+  });
+  setEditingId(null);
+};
+
 
   return (
     <Box sx={{ maxWidth: 700, mx: "auto", mt: 4, p: 2 }}>
@@ -267,6 +304,33 @@ export default function Products() {
             required
             fullWidth
           />
+           <TextField
+            label="Stok Adedi"
+            name="stockQuantity"
+            value={form.stockQuantity}
+            onChange={handleChange}
+            type="number"
+            inputProps={{ min: "0" }}
+            fullWidth
+          />
+           <TextField
+            label="Resim URL"
+            name="imageUrl"
+            value={form.imageUrl}
+            onChange={handleChange}
+            fullWidth
+          />
+          <TextField
+            label="Kategori ID"
+            name="categoryID"
+            value={form.categoryID}
+            onChange={handleChange}
+            type="number"
+            inputProps={{ min: "1" }}
+            fullWidth
+          />
+
+
           <Stack direction="row" spacing={2}>
             <Button variant="contained" type="submit">
               {editingId !== null ? "Güncelle" : "Ekle"}

@@ -125,16 +125,7 @@ export default function HomePage() {
                   >
                     {product.description}
                   </Typography>
-                  <Typography
-                    variant="subtitle1"
-                    color="primary"
-                    fontWeight="bold"
-                  >
-                    ₺{product.price.toFixed(2)}
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    Stok: {product.stockQuantity}
-                  </Typography>
+              
                   <Box display={"flex"} justifyContent="flex-end" mt={2}>
                     <Button
                       variant="contained"

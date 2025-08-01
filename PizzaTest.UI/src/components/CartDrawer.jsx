@@ -38,8 +38,8 @@ export default function CartDrawer({ open, onClose, cart, setCart }) {
     }
   };
 
-  const toplamFiyat = cart.reduce(
-    (acc, item) => acc + item.productPrice * item.quantity,
+  const toplamAdet = cart.reduce(
+    (acc, item) => acc +   item.quantity, 0,
     0
   );
 
@@ -111,7 +111,7 @@ export default function CartDrawer({ open, onClose, cart, setCart }) {
         </List>
 
         <Typography fontWeight="bold" mt={2}>
-          Toplam: ₺{toplamFiyat.toFixed(2)}
+          Toplam Ürün Adedi: {toplamAdet}
         </Typography>
 
         <Box mt={2} display="flex" gap={1}>
