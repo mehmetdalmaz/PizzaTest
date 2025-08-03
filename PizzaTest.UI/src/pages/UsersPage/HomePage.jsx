@@ -262,6 +262,7 @@ export default function HomePage() {
                       <Button
                         variant="contained"
                         onClick={() => urunuOnayla(product.id)}
+                        size="small"
                       >
                         Sepete Ekle
                       </Button>
@@ -271,6 +272,7 @@ export default function HomePage() {
                       variant="contained"
                       fullWidth
                       onClick={() => sepeteEkle(product.id)}
+                      size="small"
                     >
                       Sepete Ekle
                     </Button>
