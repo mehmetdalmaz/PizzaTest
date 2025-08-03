@@ -14,6 +14,7 @@ import {
   IconButton,
   Button,
   TextField,
+  useMediaQuery,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -32,18 +33,18 @@ function Row({ order }) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell>{order.id}</TableCell>
-        <TableCell>{order.userID}</TableCell>
-        <TableCell>
+        <TableCell sx={cellStyle}>{order.id}</TableCell>
+        <TableCell sx={cellStyle}>{order.userID}</TableCell>
+        <TableCell sx={cellStyle}>
           {order.userName} {order.userSurname}
         </TableCell>
-        <TableCell>
+        <TableCell sx={cellStyle}>
           {order.addressLine1}, {order.city}
         </TableCell>
-        <TableCell>{new Date(order.orderDate).toLocaleString()}</TableCell>
-        <TableCell>{new Date(order.deliveryDate).toLocaleString()}</TableCell>
-        <TableCell>{order.totalPrice.toFixed(2)} ₺</TableCell>
-        <TableCell>{order.orderNote || "-"}</TableCell>
+        <TableCell sx={cellStyle}>{new Date(order.orderDate).toLocaleString()}</TableCell>
+        <TableCell sx={cellStyle}>{new Date(order.deliveryDate).toLocaleString()}</TableCell>
+        <TableCell sx={cellStyle}>{order.totalPrice.toFixed(2)} ₺</TableCell>
+        <TableCell sx={cellStyle}>{order.orderNote || "-"}</TableCell>
       </TableRow>
 
       <TableRow>
@@ -54,8 +55,7 @@ function Row({ order }) {
                 Adres Detayları
               </Typography>
               <Typography variant="body2" gutterBottom>
-                {order.addressLine1}, {order.addressLine2}, {order.city},{" "}
-                {order.state}, {order.postalCode}, {order.country}
+                {order.addressLine1}, {order.addressLine2}, {order.city}, {order.state}, {order.postalCode}, {order.country}
               </Typography>
 
               <Typography variant="subtitle1" gutterBottom sx={{ mt: 2 }}>
@@ -64,19 +64,19 @@ function Row({ order }) {
               <Table size="small" aria-label="order-details">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Ürün Adı</TableCell>
-                    <TableCell>Adet</TableCell>
-                    <TableCell>Birim Fiyatı</TableCell>
-                    <TableCell>Toplam Fiyat</TableCell>
+                    <TableCell sx={cellStyle}>\u00dcrün Adı</TableCell>
+                    <TableCell sx={cellStyle}>Adet</TableCell>
+                    <TableCell sx={cellStyle}>Birim Fiyatı</TableCell>
+                    <TableCell sx={cellStyle}>Toplam Fiyat</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {order.orderDetails.map((item) => (
                     <TableRow key={item.id}>
-                      <TableCell>{item.productName}</TableCell>
-                      <TableCell>{item.quantity}</TableCell>
-                      <TableCell>{item.productPrice.toFixed(2)} ₺</TableCell>
-                      <TableCell>{item.totalPrice.toFixed(2)} ₺</TableCell>
+                      <TableCell sx={cellStyle}>{item.productName}</TableCell>
+                      <TableCell sx={cellStyle}>{item.quantity}</TableCell>
+                      <TableCell sx={cellStyle}>{item.productPrice.toFixed(2)} ₺</TableCell>
+                      <TableCell sx={cellStyle}>{item.totalPrice.toFixed(2)} ₺</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -89,14 +89,20 @@ function Row({ order }) {
   );
 }
 
+const cellStyle = {
+  fontSize: { xs: "0.7rem", sm: "0.8rem", md: "1rem" },
+  px: { xs: 0.5, sm: 1.5, md: 2 },
+  py: { xs: 0.5, sm: 1 },
+};
+
 export default function Orders() {
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -163,8 +169,7 @@ export default function Orders() {
           "Teslim Tarihi": new Date(order.deliveryDate).toLocaleString(),
           "Toplam Tutar (₺)": order.totalPrice,
           Not: order.orderNote || "-",
-
-          "Ürün Adı": item.productName,
+          "\u00dcr\u00fcn Adı": item.productName,
           Adet: item.quantity,
           "Birim Fiyatı (₺)": item.productPrice.toFixed(2),
           "Toplam Fiyat (₺)": item.totalPrice.toFixed(2),
@@ -195,10 +200,12 @@ export default function Orders() {
     <>
       <Box
         display="flex"
+        flexDirection={{ xs: "column", sm: "row" }}
         justifyContent="center"
-        gap={2}
         alignItems="center"
+        gap={2}
         mt={2}
+        px={{ xs: 1, md: 0 }}
       >
         <TextField
           label="Başlangıç Tarihi"
@@ -206,6 +213,7 @@ export default function Orders() {
           InputLabelProps={{ shrink: true }}
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
+          sx={{ width: { xs: "100%", sm: "auto" }, fontSize: { xs: "0.8rem" } }}
         />
         <TextField
           label="Bitiş Tarihi"
@@ -213,11 +221,10 @@ export default function Orders() {
           InputLabelProps={{ shrink: true }}
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
-          inputProps={{
-            min: startDate || undefined,
-          }}
+          inputProps={{ min: startDate || undefined }}
+          sx={{ width: { xs: "100%", sm: "auto" }, fontSize: { xs: "0.8rem" } }}
         />
-        <Button variant="contained" onClick={handleFilter}>
+        <Button variant="contained" onClick={handleFilter} sx={{ fontSize: { xs: "0.75rem" } }}>
           Filtrele
         </Button>
         <Button
@@ -227,6 +234,7 @@ export default function Orders() {
             setEndDate("");
             setFilteredOrders(orders);
           }}
+          sx={{ fontSize: { xs: "0.75rem" } }}
         >
           Temizle
         </Button>
@@ -234,23 +242,28 @@ export default function Orders() {
 
       <TableContainer
         component={Paper}
-        style={{ maxWidth: 1200, margin: "auto", marginTop: 20 }}
+        sx={{ maxWidth: 1200, margin: "auto", marginTop: 2, px: { xs: 1, md: 0 } }}
       >
-        <Typography variant="h5" align="center" gutterBottom>
+        <Typography
+          variant="h5"
+          align="center"
+          gutterBottom
+          sx={{ fontSize: { xs: "1rem", sm: "1.25rem", md: "1.5rem" } }}
+        >
           Sipariş Listesi
         </Typography>
         <Table aria-label="orders table">
           <TableHead>
             <TableRow>
               <TableCell />
-              <TableCell>Sipariş ID</TableCell>
-              <TableCell>Kullanıcı ID</TableCell>
-              <TableCell>Ad Soyad</TableCell>
-              <TableCell>Adres</TableCell>
-              <TableCell>Sipariş Tarihi</TableCell>
-              <TableCell>Teslim Tarihi</TableCell>
-              <TableCell>Toplam Tutar</TableCell>
-              <TableCell>Not</TableCell>
+              <TableCell sx={cellStyle}>Sipariş ID</TableCell>
+              <TableCell sx={cellStyle}>Kullanıcı ID</TableCell>
+              <TableCell sx={cellStyle}>Ad Soyad</TableCell>
+              <TableCell sx={cellStyle}>Adres</TableCell>
+              <TableCell sx={cellStyle}>Sipariş Tarihi</TableCell>
+              <TableCell sx={cellStyle}>Teslim Tarihi</TableCell>
+              <TableCell sx={cellStyle}>Toplam Tutar</TableCell>
+              <TableCell sx={cellStyle}>Not</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -261,16 +274,14 @@ export default function Orders() {
                 </TableCell>
               </TableRow>
             ) : (
-              filteredOrders.map((order) => (
-                <Row key={order.id} order={order} />
-              ))
+              filteredOrders.map((order) => <Row key={order.id} order={order} />)
             )}
           </TableBody>
         </Table>
       </TableContainer>
 
-      <Box display="flex" justifyContent="center" mt={2}>
-        <Button variant="contained" color="success" onClick={exportToExcel}>
+      <Box display="flex" justifyContent="center" mt={2} px={{ xs: 1, md: 0 }}>
+        <Button variant="contained" color="success" onClick={exportToExcel} sx={{ fontSize: { xs: "0.75rem" } }}>
           Excel'e Aktar
         </Button>
       </Box>

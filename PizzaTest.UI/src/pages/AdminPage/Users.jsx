@@ -9,7 +9,6 @@ import {
   Paper,
   Typography,
   CircularProgress,
-  Box,
 } from "@mui/material";
 import { userService } from "../../services/userService";
 
@@ -41,7 +40,12 @@ export default function Users() {
   return (
     <TableContainer
       component={Paper}
-      style={{ maxWidth: 900, margin: "auto", marginTop: 20 }}
+      sx={{
+        maxWidth: 900,
+        margin: "20px auto",
+        width: "95%", // Mobilde sayfaya taşmadan sığması için
+        overflowX: "auto", // Taşma olursa scroll yerine sığmaya çalışır
+      }}
     >
       <Typography variant="h5" align="center" gutterBottom>
         Kullanıcı Listesi
@@ -58,7 +62,7 @@ export default function Users() {
         <TableBody>
           {users.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={6} align="center">
+              <TableCell colSpan={4} align="center">
                 Kullanıcı bulunamadı.
               </TableCell>
             </TableRow>

@@ -67,29 +67,40 @@ export default function AdminHomePage() {
   }
 
   return (
-    <Grid container spacing={3}>
-      {stats.map((item, index) => (
-        <Grid item xs={12} sm={6} md={4} key={index}>
-          <Paper
-            elevation={3}
-            sx={{
-              p: 3,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 1,
-            }}
-          >
-            {item.icon}
-            <Typography variant="h6" fontWeight={600}>
-              {item.title}
-            </Typography>
-            <Typography variant="h4" color="primary">
-              {item.value}
-            </Typography>
-          </Paper>
-        </Grid>
-      ))}
-    </Grid>
+      <Grid container spacing={3}>
+          {stats.map((item, index) => (
+              <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  key={index}
+                  sx={{ display: "flex" }}   // <-- burası çok önemli
+              >
+                  <Paper
+                      elevation={3}
+                      sx={{
+                          p: 3,
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          gap: 1,
+                          flexGrow: 1,           // <-- Paper kart yüksekliği esnek ve eşit olsun
+                          minHeight: 100,
+                          minWidth: 150,
+
+                      }}
+                  >
+                      {item.icon}
+                      <Typography variant="h6" fontWeight={600}>
+                          {item.title}
+                      </Typography>
+                      <Typography variant="h4" color="primary">
+                          {item.value}
+                      </Typography>
+                  </Paper>
+              </Grid>
+          ))}
+      </Grid>
   );
 }

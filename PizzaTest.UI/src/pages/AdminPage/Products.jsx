@@ -218,8 +218,33 @@ const handleCancel = () => {
 
 
   return (
-    <Box sx={{ maxWidth: 700, mx: "auto", mt: 4, p: 2 }}>
-      <Typography variant="h4" component="h2" gutterBottom>
+      <Box
+          sx={{
+          maxWidth: 700,
+          mx: "auto",
+          mt: 4,
+          p: 2,
+
+          // Mobilde padding ve margin azaltılıyor
+          "@media (max-width:600px)": {
+              maxWidth: "100%",
+              p: 1,
+              mx: 0,
+          },
+      }}
+      >
+       <Typography
+           variant="h4"
+           component="h2"
+           gutterBottom
+           sx={{
+           // Mobilde yazı biraz küçültülebilir
+           "@media (max-width:600px)": {
+                 fontSize: "1.5rem",
+                  px: 1,
+           },
+      }}
+      >
         Ürünler
       </Typography>
 
@@ -229,27 +254,68 @@ const handleCancel = () => {
         </Box>
       )}
       {error && (
-        <Typography color="error" sx={{ mb: 2 }}>
+        <Typography 
+        color="error"
+        sx={{
+            mb: 2,
+            px: 1,
+            fontSize:{xs:"0.9rem",md:"inherit"},
+        }}
+        >
           {error}
         </Typography>
       )}
 
-      <TableContainer component={Paper} sx={{ mb: 3 }}>
-        <Table aria-label="products table">
+      <TableContainer
+      component={Paper} 
+      sx={{ 
+          mb: 3,
+          width: "100%",
+          overflowX: "hidden", // Mobilde kaydırma kapalı
+          "@media (max-width:600px)": {
+              overflowX: "hidden",
+          },
+          }}
+          >
+        <Table
+        aria-label="products table"
+        sx={{
+          // Table genişliği %100 mobilde ve masaüstünde
+          width: "100%",
+          // Mobilde hücre padding küçültülebilir
+          "@media (max-width:600px)": {
+            "& td, & th": {
+              padding: "6px 8px",
+              fontSize: "0.8rem",
+              whiteSpace: "nowrap", // Metni tek satır yapar
+              overflow: "hidden",
+              textOverflow: "ellipsis", // Uzun metinleri ... yapar
+              maxWidth: "100px", // Sütun genişliği sınırı (opsiyonel)
+              },
+            // İşlemler sütunu için genişlik biraz artır
+      "& th:last-child, & td:last-child": {
+        maxWidth: "150px",
+        whiteSpace: "normal", // satır kayması için
+      },
+          },
+        }}
+        >
           <TableHead>
             <TableRow>
-              <TableCell />
-              <TableCell>ID</TableCell>
-              <TableCell>Kategori Adı</TableCell>
-              <TableCell>Ürün Adı</TableCell>
-              <TableCell>Fiyat</TableCell>
-              <TableCell align="right">İşlemler</TableCell>
+            <TableCell sx={{ width: 30 }} />
+            <TableCell sx={{ width: 40 }}>ID</TableCell>
+            <TableCell sx={{ width: 100 }}>Kategori Adı</TableCell>
+            <TableCell sx={{ width: 120 }}>Ürün Adı</TableCell>
+            <TableCell sx={{ width: 70 }}>Fiyat</TableCell>
+            <TableCell align="right" sx={{ width: 90 }}>
+              İşlemler
+            </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {products.length === 0 && !loading ? (
               <TableRow>
-                <TableCell colSpan={5} align="center">
+                <TableCell colSpan={6} align="center">
                   Ürün bulunamadı.
                 </TableCell>
               </TableRow>
@@ -267,7 +333,12 @@ const handleCancel = () => {
         </Table>
       </TableContainer>
 
-      <Typography variant="h5" gutterBottom>
+      <Typography variant="h5" gutterBottom
+       sx={{
+        px: { xs: 1, md: 0 },
+        fontSize: { xs: "1.25rem", md: "inherit" },
+      }}
+      >
         {editingId !== null ? "Ürün Güncelle" : "Yeni Ürün Ekle"}
       </Typography>
       <Box
@@ -275,6 +346,7 @@ const handleCancel = () => {
         onSubmit={handleSubmit}
         noValidate
         autoComplete="off"
+        sx={{ px: { xs: 1, md: 0 }, pb: 4 }}
       >
         <Stack spacing={2}>
           <TextField
