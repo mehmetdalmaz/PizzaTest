@@ -65,7 +65,7 @@ export default function CartDrawer({ open, onClose, cart, setCart }) {
 
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
-      <Box sx={{ width: 350, p: 2 }}>
+      <Box sx={{ width: 420, p: 2 }}>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="h6">Sepet</Typography>
           <IconButton onClick={onClose}>
