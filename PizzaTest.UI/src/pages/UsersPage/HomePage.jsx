@@ -139,7 +139,8 @@ export default function HomePage() {
                 {product.imageUrl && (
                   <CardMedia
                     component="img"
-                    height="180"
+                    height="250"
+                    sx={{ objectFit: "cover" }}
                     image={product.imageUrl}
                     alt={product.name}
                   />
