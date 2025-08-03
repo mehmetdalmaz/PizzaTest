@@ -8,15 +8,17 @@ import {
   Card,
   CardContent,
   CardMedia,
-  IconButton,
   Typography,
   Snackbar,
   Alert,
+  Stack,
 } from "@mui/material";
 import { cartService } from "../../services/cartService";
 import CartDrawer from "../../components/CartDrawer";
+import { useNavigate } from "react-router";
 
 export default function HomePage() {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [cart, setCart] = useState([]);
@@ -24,6 +26,8 @@ export default function HomePage() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [quantities, setQuantities] = useState({});
+  const [visibleQuantityInputs, setVisibleQuantityInputs] = useState({});
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === "clickaway") return;
@@ -56,17 +60,56 @@ export default function HomePage() {
   const sepeteEkle = async (productId) => {
     try {
       await cartService.addCart({ productId, quantity: 1 });
+
       const response = await cartService.getCart();
       setCart(response.data.cartItems || []);
-      setSnackbarMessage("Ürün sepete eklendi!");
+
+      setSnackbarMessage("1 adet ürün sepete eklendi!");
       setSnackbarSeverity("success");
       setSnackbarOpen(true);
+
+      setVisibleQuantityInputs((prev) => ({
+        ...prev,
+        [productId]: true,
+      }));
+      setQuantities((prev) => ({
+        ...prev,
+        [productId]: 1,
+      }));
     } catch (err) {
       console.error("Sepete eklenemedi:", err);
       setSnackbarMessage("Ürün sepete eklenemedi!");
       setSnackbarSeverity("error");
       setSnackbarOpen(true);
     }
+  };
+
+  const urunuOnayla = async (productId) => {
+    const quantity = quantities[productId] || 1;
+
+    try {
+      await cartService.addCart({ productId, quantity });
+      const response = await cartService.getCart();
+      setCart(response.data.cartItems || []);
+      setSnackbarMessage("Ürün sepete eklendi!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+
+      setVisibleQuantityInputs((prev) => ({
+        ...prev,
+        [productId]: false,
+      }));
+    } catch (err) {
+      console.error("Sepete eklenemedi:", err);
+      setSnackbarMessage("Ürün sepete eklenemedi!");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/auth/login");
   };
 
   return (
@@ -87,23 +130,39 @@ export default function HomePage() {
             {snackbarMessage}
           </Alert>
         </Snackbar>
-        <Box
-          display={"flex"}
-          justifyContent="space-between"
-          mb={4}
-          alignItems={"center"}
-        >
-          <Typography variant="h4" mb={3}>
-            Ürünler
-          </Typography>
-          <Button onClick={() => setDrawerOpen(true)}>
-            <Badge
-              badgeContent={cart.reduce((acc, item) => acc + item.quantity, 0)}
-              color="primary"
-            >
-              <ShoppingCartIcon sx={{ color: "black", fontSize: 35 }} />
-            </Badge>
-          </Button>
+
+        <Box sx={{ mb: 4 }}>
+          <Stack
+            direction={"row"}
+            spacing={2}
+            alignItems="center"
+            justifyContent={"space-between"}
+          >
+            <Typography variant="h4" mb={3}>
+              Ürünler
+            </Typography>
+            <Stack direction="row" spacing={2}>
+              <Button
+                variant="contained"
+                color="error"
+                size="small"
+                onClick={handleLogout}
+              >
+                Çıkış Yap
+              </Button>
+              <Button onClick={() => setDrawerOpen(true)}>
+                <Badge
+                  badgeContent={cart.reduce(
+                    (acc, item) => acc + item.quantity,
+                    0
+                  )}
+                  color="primary"
+                >
+                  <ShoppingCartIcon sx={{ color: "black", fontSize: 35 }} />
+                </Badge>
+              </Button>
+            </Stack>
+          </Stack>
         </Box>
 
         {error && (
@@ -127,10 +186,14 @@ export default function HomePage() {
                 key={product.id}
                 sx={{
                   maxWidth: 345,
+                  height: "100%",
                   borderRadius: 3,
                   boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
                   cursor: "pointer",
                   transition: "transform 0.3s",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
                   "&:hover": {
                     transform: "scale(1.05)",
                   },
@@ -145,28 +208,74 @@ export default function HomePage() {
                     alt={product.name}
                   />
                 )}
-                <CardContent>
-                  <Typography variant="h6" gutterBottom>
-                    {product.name}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    noWrap
-                    sx={{ mb: 1 }}
-                  >
-                    {product.description}
-                  </Typography>
 
-                  <Box display={"flex"} justifyContent="flex-end" mt={2}>
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Box>
+                    <Typography variant="h6" gutterBottom>
+                      {product.name}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ mb: 1 }}
+                    >
+                      {product.description}
+                    </Typography>
+                  </Box>
+                </CardContent>
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 2,
+                    justifyContent: "space-between",
+                    px: 2,
+                    pb: 2,
+                  }}
+                >
+                  {visibleQuantityInputs[product.id] ? (
+                    <>
+                      <input
+                        type="number"
+                        min={1}
+                        value={quantities[product.id] || 1}
+                        onChange={(e) =>
+                          setQuantities({
+                            ...quantities,
+                            [product.id]: Math.max(
+                              1,
+                              parseInt(e.target.value) || 1
+                            ),
+                          })
+                        }
+                        style={{
+                          width: "60px",
+                          height: "34px",
+                          borderRadius: "5px",
+                          padding: "0 10px",
+                          border: "1px solid #ccc",
+                          textAlign: "center",
+                          fontSize: "1rem",
+                        }}
+                      />
+                      <Button
+                        variant="contained"
+                        onClick={() => urunuOnayla(product.id)}
+                      >
+                        Sepete Ekle
+                      </Button>
+                    </>
+                  ) : (
                     <Button
                       variant="contained"
+                      fullWidth
                       onClick={() => sepeteEkle(product.id)}
                     >
                       Sepete Ekle
                     </Button>
-                  </Box>
-                </CardContent>
+                  )}
+                </Box>
               </Card>
             ))}
           </Box>

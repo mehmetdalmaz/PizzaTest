@@ -13,6 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { cartService } from "../services/cartService";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useNavigate } from "react-router";
 
 export default function CartDrawer({ open, onClose, cart, setCart }) {
@@ -30,11 +31,23 @@ export default function CartDrawer({ open, onClose, cart, setCart }) {
 
   const urunSil = async (productId) => {
     try {
-      await cartService.removeCart(productId);
+      await cartService.removeCart(productId, 1);
       const response = await cartService.getCart();
       setCart(response.data.cartItems || []);
     } catch (err) {
       console.error("Ürün silinemedi:", err);
+    }
+  };
+
+  const urunKaldir = async (productId, quantity) => {
+    try {
+      window.confirm(
+        "Bu ürünü sepetinizden kaldırmak istediğinize emin misiniz?"
+      ) && (await cartService.removeCart(productId, quantity));
+      const response = await cartService.getCart();
+      setCart(response.data.cartItems || []);
+    } catch (err) {
+      console.error("Ürün kaldırılamadı:", err);
     }
   };
 
@@ -74,11 +87,17 @@ export default function CartDrawer({ open, onClose, cart, setCart }) {
                     <AddIcon />
                   </IconButton>
 
-                  <IconButton
-                    edge="end"
-                    onClick={() => urunSil(item.productID)}
-                  >
+                  <IconButton onClick={() => urunSil(item.productID)}>
                     <RemoveCircleIcon />
+                  </IconButton>
+
+                  <IconButton
+                    onClick={() => {
+                      console.log("Silinecek adet:", item.quantity);
+                      urunKaldir(item.productID, item.quantity);
+                    }}
+                  >
+                    <DeleteForeverIcon />
                   </IconButton>
                 </>
               }

@@ -1,7 +1,8 @@
 import axios from "axios";
 
+// https://siparis.vendentech.com/api/
 const api = axios.create({
-  baseURL: "https://siparis.vendentech.com/api/",
+  baseURL: "https://localhost:7052/api",
   headers: {
     "Content-Type": "application/json",
   },

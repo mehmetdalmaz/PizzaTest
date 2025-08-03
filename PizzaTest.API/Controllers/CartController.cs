@@ -52,7 +52,7 @@ namespace PizzaTest.API.Controllers
         }
 
         [HttpDelete("{productId}")]
-        public IActionResult RemoveItemFromCart(int productId)
+        public IActionResult RemoveItemFromCart(int productId, int quantity = 1)
         {
             var userId = GetUserId();
             var cart = _cartService.GetOrCreateCart(userId);
@@ -60,7 +60,7 @@ namespace PizzaTest.API.Controllers
             if (cart == null)
                 return NotFound("Cart not found");
 
-            _cartService.RemoveItem(cart, productId, quantity: 1);
+            _cartService.RemoveItem(cart, productId, quantity);
             var cartDto = _mapper.Map<CreateCartDto>(cart);
             return Ok(cartDto);
         }
