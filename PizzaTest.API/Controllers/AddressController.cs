@@ -90,9 +90,19 @@ namespace PizzaTest.API.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            var userId = GetUserId();
+
             var address = _mapper.Map<Address>(createUserAddressDto);
+            address.UserID = userId;
+
             _addressService.TInsert(address);
-            return Ok("Adres başarıyla eklendi.");
+
+            var createdAddress = _addressService.TGetById(address.ID);
+
+            var resultDto = _mapper.Map<ResultUserAddressDto>(createdAddress);
+
+            return Ok(resultDto);
         }
 
         [HttpPut("{id}")]

@@ -16,27 +16,19 @@ import PeopleIcon from "@mui/icons-material/People";
 import { Link, useLocation } from "react-router-dom";
 
 const menuItems = [
-  { text: "Dashboard", icon: <DashboardIcon />, path: "/web/admin-panel/home" },
+  { text: "Dashboard", icon: <DashboardIcon />, path: "/admin-panel/home" },
   {
     text: "Kategoriler",
     icon: <CategoryIcon />,
-    path: "/web/admin-panel/categories",
+    path: "/admin-panel/categories",
   },
-  {
-    text: "Ürünler",
-    icon: <InventoryIcon />,
-    path: "/web/admin-panel/products",
-  },
+  { text: "Ürünler", icon: <InventoryIcon />, path: "/admin-panel/products" },
   {
     text: "Siparişler",
     icon: <ShoppingCartIcon />,
-    path: "/web/admin-panel/orders",
+    path: "/admin-panel/orders",
   },
-  {
-    text: "Kullanıcılar",
-    icon: <PeopleIcon />,
-    path: "/web/admin-panel/users",
-  },
+  { text: "Kullanıcılar", icon: <PeopleIcon />, path: "/admin-panel/users" },
 ];
 
 export default function Sidebar() {

@@ -41,9 +41,9 @@ export default function RegisterPage() {
     try {
       const response = await authService.register(data);
 
-      if (response?.data?.token) {
-        localStorage.setItem("token", response.data.token);
-        navigate("/home");
+      if (response?.data === "Kayıt işlemi başarılı.") {
+        // Kayıt başarılı, örneğin giriş sayfasına yönlendirelim
+        navigate("/auth/login");
       } else {
         setRegisterError("Kayıt işlemi başarısız. Lütfen tekrar deneyin.");
       }
@@ -128,7 +128,7 @@ export default function RegisterPage() {
             <Button
               size="small"
               sx={{ m: 1 }}
-              onClick={() => navigate("/web/auth/login")}
+              onClick={() => navigate("/auth/login")}
             >
               giriş yap
             </Button>

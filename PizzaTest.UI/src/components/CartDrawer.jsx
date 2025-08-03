@@ -45,7 +45,7 @@ export default function CartDrawer({ open, onClose, cart, setCart }) {
       alert("Sepetinizde ürün yok.");
       return;
     } else {
-      navigate("/web/order");
+      navigate("/order");
       onClose();
     }
   };
@@ -99,9 +99,7 @@ export default function CartDrawer({ open, onClose, cart, setCart }) {
 
               <ListItemText
                 primary={item.productName}
-                secondary={`₺${item.productPrice.toFixed(2)} x ${
-                  item.quantity
-                }`}
+                secondary={`Adet: ${item.quantity}`}
               />
             </ListItem>
           ))}

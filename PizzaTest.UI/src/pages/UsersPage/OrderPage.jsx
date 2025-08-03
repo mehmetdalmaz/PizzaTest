@@ -74,7 +74,9 @@ export default function OrderPage() {
     }
 
     try {
-      const res = await addressService.addAddress(newAddress);
+      const addressToSend = { ...newAddress };
+
+      const res = await addressService.addAddress(addressToSend);
       setAddresses((prev) => [...prev, res.data]);
       setSelectedAddressId(res.data.id.toString());
       setNewAddress({
@@ -87,7 +89,7 @@ export default function OrderPage() {
       });
       setNewAddressExpanded(false);
     } catch (err) {
-      console.error("Adres eklenemedi", err);
+      console.error("Adres eklenemedi", err.response || err.message || err);
       alert("Adres ekleme başarısız");
     }
   };

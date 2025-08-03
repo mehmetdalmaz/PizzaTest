@@ -10,6 +10,8 @@ import {
   CardMedia,
   IconButton,
   Typography,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { cartService } from "../../services/cartService";
 import CartDrawer from "../../components/CartDrawer";
@@ -19,6 +21,14 @@ export default function HomePage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [cart, setCart] = useState([]);
   const [error, setError] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") return;
+    setSnackbarOpen(false);
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -48,14 +58,35 @@ export default function HomePage() {
       await cartService.addCart({ productId, quantity: 1 });
       const response = await cartService.getCart();
       setCart(response.data.cartItems || []);
+      setSnackbarMessage("Ürün sepete eklendi!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } catch (err) {
       console.error("Sepete eklenemedi:", err);
+      setSnackbarMessage("Ürün sepete eklenemedi!");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
 
   return (
     <>
       <Box sx={{ padding: 4 }}>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert
+            onClose={handleCloseSnackbar}
+            severity={snackbarSeverity}
+            sx={{ width: "100%" }}
+            variant="filled"
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
         <Box
           display={"flex"}
           justifyContent="space-between"
@@ -125,7 +156,7 @@ export default function HomePage() {
                   >
                     {product.description}
                   </Typography>
-              
+
                   <Box display={"flex"} justifyContent="flex-end" mt={2}>
                     <Button
                       variant="contained"
