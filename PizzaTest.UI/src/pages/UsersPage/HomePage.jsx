@@ -27,7 +27,6 @@ export default function HomePage() {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [quantities, setQuantities] = useState({});
-  const [visibleQuantityInputs, setVisibleQuantityInputs] = useState({});
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === "clickaway") return;
@@ -57,33 +56,6 @@ export default function HomePage() {
     fetchCart();
   }, []);
 
-  const sepeteEkle = async (productId) => {
-    try {
-      await cartService.addCart({ productId, quantity: 1 });
-
-      const response = await cartService.getCart();
-      setCart(response.data.cartItems || []);
-
-      setSnackbarMessage("1 adet ürün sepete eklendi!");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
-
-      setVisibleQuantityInputs((prev) => ({
-        ...prev,
-        [productId]: true,
-      }));
-      setQuantities((prev) => ({
-        ...prev,
-        [productId]: 1,
-      }));
-    } catch (err) {
-      console.error("Sepete eklenemedi:", err);
-      setSnackbarMessage("Ürün sepete eklenemedi!");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
-    }
-  };
-
   const urunuOnayla = async (productId) => {
     const quantity = quantities[productId] || 1;
 
@@ -94,11 +66,6 @@ export default function HomePage() {
       setSnackbarMessage("Ürün sepete eklendi!");
       setSnackbarSeverity("success");
       setSnackbarOpen(true);
-
-      setVisibleQuantityInputs((prev) => ({
-        ...prev,
-        [productId]: false,
-      }));
     } catch (err) {
       console.error("Sepete eklenemedi:", err);
       setSnackbarMessage("Ürün sepete eklenemedi!");
@@ -234,49 +201,38 @@ export default function HomePage() {
                     pb: 2,
                   }}
                 >
-                  {visibleQuantityInputs[product.id] ? (
-                    <>
-                      <input
-                        type="number"
-                        min={1}
-                        value={quantities[product.id] || 1}
-                        onChange={(e) =>
-                          setQuantities({
-                            ...quantities,
-                            [product.id]: Math.max(
-                              1,
-                              parseInt(e.target.value) || 1
-                            ),
-                          })
-                        }
-                        style={{
-                          width: "60px",
-                          height: "34px",
-                          borderRadius: "5px",
-                          padding: "0 10px",
-                          border: "1px solid #ccc",
-                          textAlign: "center",
-                          fontSize: "1rem",
-                        }}
-                      />
-                      <Button
-                        variant="contained"
-                        onClick={() => urunuOnayla(product.id)}
-                        size="small"
-                      >
-                        Sepete Ekle
-                      </Button>
-                    </>
-                  ) : (
+                  <>
+                    <input
+                      type="number"
+                      min={1}
+                      value={quantities[product.id] || 1}
+                      onChange={(e) =>
+                        setQuantities({
+                          ...quantities,
+                          [product.id]: Math.max(
+                            1,
+                            parseInt(e.target.value) || 1
+                          ),
+                        })
+                      }
+                      style={{
+                        width: "60px",
+                        height: "34px",
+                        borderRadius: "5px",
+                        padding: "0 10px",
+                        border: "1px solid #ccc",
+                        textAlign: "center",
+                        fontSize: "1rem",
+                      }}
+                    />
                     <Button
                       variant="contained"
-                      fullWidth
-                      onClick={() => sepeteEkle(product.id)}
+                      onClick={() => urunuOnayla(product.id)}
                       size="small"
                     >
                       Sepete Ekle
                     </Button>
-                  )}
+                  </>
                 </Box>
               </Card>
             ))}

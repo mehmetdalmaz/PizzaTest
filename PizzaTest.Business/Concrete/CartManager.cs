@@ -122,5 +122,24 @@ namespace PizzaTest.Business.Concrete
         {
             _cartDal.Update(t);
         }
+
+        public void UpdateItemQuantity(Cart cart, Products product, int quantity)
+        {
+            var item = cart.CartItems.FirstOrDefault(i => i.ProductID == product.ID);
+            if (item != null)
+            {
+                item.Quantity = quantity;
+            }
+            else
+            {
+                cart.CartItems.Add(new CartItems
+                {
+                    ProductID = product.ID,
+                    Quantity = quantity
+                });
+            }
+
+            _cartDal.Update(cart);
+        }
     }
 }

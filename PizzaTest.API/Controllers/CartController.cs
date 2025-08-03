@@ -65,6 +65,24 @@ namespace PizzaTest.API.Controllers
             return Ok(cartDto);
         }
 
+        [HttpPut("{productId}")]
+        public IActionResult UpdateItemQuantity(int productId, [FromBody] int quantity)
+        {
+            var userId = GetUserId();
+            var cart = _cartService.GetOrCreateCart(userId);
+
+            if (cart == null)
+                return NotFound("Cart not found");
+
+            var product = _productService.TGetById(productId);
+            if (product == null)
+                return NotFound("Product not found");
+
+            _cartService.UpdateItemQuantity(cart, product, quantity);
+            var cartDto = _mapper.Map<CreateCartDto>(cart);
+            return Ok(cartDto);
+        }
+
         private int GetUserId()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);

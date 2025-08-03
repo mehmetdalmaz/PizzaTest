@@ -13,5 +13,7 @@ namespace PizzaTest.Business.Abstract
         void AddItem(Cart cart, Products product, int quantity);
         void RemoveItem(Cart cart, int productID, int quantity);
         void ClearCart(int cartID);
+
+        void UpdateItemQuantity(Cart cart, Products product, int quantity);
     }
 }

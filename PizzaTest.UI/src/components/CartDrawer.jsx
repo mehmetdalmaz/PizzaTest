@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -7,6 +7,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Stack,
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -18,6 +19,7 @@ import { useNavigate } from "react-router";
 
 export default function CartDrawer({ open, onClose, cart, setCart }) {
   const navigate = useNavigate();
+  const [quantities, setQuantities] = useState({});
 
   const adetArttir = async (productId) => {
     try {
@@ -64,8 +66,21 @@ export default function CartDrawer({ open, onClose, cart, setCart }) {
   };
 
   return (
-    <Drawer anchor="right" open={open} onClose={onClose}>
-      <Box sx={{ width: 420, p: 2 }}>
+    <Drawer
+      anchor="right"
+      open={open}
+      onClose={onClose}
+      PaperProps={{
+        sx: {
+          width: { xs: "100%", sm: 420 },
+        },
+      }}
+    >
+      <Box
+        sx={{
+          p: 1,
+        }}
+      >
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="h6">Sepet</Typography>
           <IconButton onClick={onClose}>
@@ -115,11 +130,66 @@ export default function CartDrawer({ open, onClose, cart, setCart }) {
                   borderRadius: 4,
                 }}
               />
-
-              <ListItemText
-                primary={item.productName}
-                secondary={`Adet: ${item.quantity}`}
-              />
+              <Stack>
+                <Typography variant="body1" sx={{ flexGrow: 1 }}>
+                  {item.productName}
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    direction: "row",
+                    gap: 1,
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="body2" color="text.secondary">
+                    Adet:
+                  </Typography>
+                  <input
+                    type="number"
+                    min={1}
+                    value={quantities[item.productID] ?? item.quantity}
+                    onChange={(e) =>
+                      setQuantities({
+                        ...quantities,
+                        [item.productID]: Math.max(
+                          1,
+                          parseInt(e.target.value) || 1
+                        ),
+                      })
+                    }
+                    onBlur={async () => {
+                      const yeniAdet = quantities[item.productID];
+                      if (yeniAdet && yeniAdet !== item.quantity) {
+                        try {
+                          await cartService.updateCart(
+                            item.productID,
+                            yeniAdet
+                          );
+                          const response = await cartService.getCart();
+                          setCart(response.data.cartItems || []);
+                        } catch (err) {
+                          console.error("Adet güncellenemedi:", err);
+                        }
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.target.blur();
+                      }
+                    }}
+                    style={{
+                      width: "50px",
+                      height: "30px",
+                      borderRadius: "5px",
+                      padding: "0 10px",
+                      border: "1px solid #ccc",
+                      textAlign: "center",
+                      fontSize: "1rem",
+                    }}
+                  />
+                </Box>
+              </Stack>
             </ListItem>
           ))}
         </List>
