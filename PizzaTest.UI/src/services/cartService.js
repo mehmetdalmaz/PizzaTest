@@ -7,4 +7,5 @@ export const cartService = {
   removeCart: (productId, quantity = 1) =>
     methods.delete(`Cart/${productId}?quantity=${quantity}`),
   updateCart: (id, quantity) => methods.put(`Cart/${id}`, quantity),
+  clearCart: () => methods.delete("Cart/clear"),
 };

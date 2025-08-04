@@ -67,6 +67,25 @@ namespace PizzaTest.API.Controllers
             var resultOrderDto = _mapper.Map<List<ResultOrderDto>>(orders);
             return Ok(resultOrderDto);
         }
+
+        [HttpDelete("delete/{id}")]
+        public IActionResult DeleteOrder(int id)
+        {
+            try
+            {
+                var order = _orderService.TGetById(id);
+                if (order == null)
+                {
+                    return NotFound(new { Message = "Sipariş bulunamadı." });
+                }
+                _orderService.TDelete(order);
+                return Ok(new { Message = "Sipariş başarıyla silindi." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
     }
 }
 

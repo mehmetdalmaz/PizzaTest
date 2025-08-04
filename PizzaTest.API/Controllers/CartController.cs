@@ -44,7 +44,7 @@ namespace PizzaTest.API.Controllers
             var product = _productService.TGetById(productId);
 
             if (product == null)
-                return NotFound("Product not found");
+                return NotFound("Ürün bulunamadı");
 
             _cartService.AddItem(cart, product, quantity);
             var cartDto = _mapper.Map<CreateCartDto>(cart);
@@ -58,11 +58,22 @@ namespace PizzaTest.API.Controllers
             var cart = _cartService.GetOrCreateCart(userId);
 
             if (cart == null)
-                return NotFound("Cart not found");
+                return NotFound("Sepet bulunamadı");
 
             _cartService.RemoveItem(cart, productId, quantity);
             var cartDto = _mapper.Map<CreateCartDto>(cart);
             return Ok(cartDto);
+        }
+
+        [HttpDelete("clear")]
+        public IActionResult ClearCart()
+        {
+            var userId = GetUserId();
+            var cart = _cartService.GetOrCreateCart(userId);
+            if (cart == null)
+                return NotFound("Sepet bulunamadı");
+            _cartService.ClearCart(cart.ID);
+            return Ok("Sepet Temizlendi");
         }
 
         [HttpPut("{productId}")]

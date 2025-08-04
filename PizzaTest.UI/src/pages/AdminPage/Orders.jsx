@@ -26,6 +26,17 @@ import { saveAs } from "file-saver";
 function Row({ order }) {
   const [open, setOpen] = useState(false);
 
+  const handleDelete = async (orderId) => {
+    if (window.confirm("Bu siparişi silmek istediğinize emin misiniz?")) {
+      try {
+        await orderService.deleteOrder(orderId);
+        window.location.reload();
+      } catch (err) {
+        console.error("Sipariş silinemedi:", err);
+      }
+    }
+  };
+
   return (
     <>
       <TableRow hover>
@@ -48,8 +59,19 @@ function Row({ order }) {
         <TableCell sx={cellStyle}>
           {new Date(order.deliveryDate).toLocaleString()}
         </TableCell>
-        <TableCell sx={cellStyle}>{order.totalPrice.toFixed(2)} ₺</TableCell>
+        <TableCell sx={cellStyle} style={{ textWrap: "nowrap" }}>
+          {order.totalPrice.toFixed(2)} ₺
+        </TableCell>
         <TableCell sx={cellStyle}>{order.orderNote || "-"}</TableCell>
+        <TableCell sx={cellStyle}>
+          <Button
+            color="error"
+            variant="contained"
+            onClick={() => handleDelete(order.id)}
+          >
+            Sil
+          </Button>
+        </TableCell>
       </TableRow>
 
       <TableRow>

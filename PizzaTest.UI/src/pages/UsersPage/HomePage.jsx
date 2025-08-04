@@ -204,17 +204,29 @@ export default function HomePage() {
                   <>
                     <input
                       type="number"
-                      min={1}
-                      value={quantities[product.id] || 1}
-                      onChange={(e) =>
-                        setQuantities({
-                          ...quantities,
-                          [product.id]: Math.max(
-                            1,
-                            parseInt(e.target.value) || 1
-                          ),
-                        })
+                      value={
+                        quantities[product.id] !== undefined
+                          ? quantities[product.id]
+                          : 1
                       }
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (val === "") {
+                          setQuantities({
+                            ...quantities,
+                            [product.id]: "",
+                          });
+                          return;
+                        }
+
+                        const numberVal = parseInt(val);
+                        if (!isNaN(numberVal)) {
+                          setQuantities({
+                            ...quantities,
+                            [product.id]: numberVal < 1 ? 1 : numberVal,
+                          });
+                        }
+                      }}
                       style={{
                         width: "60px",
                         height: "34px",
@@ -225,6 +237,7 @@ export default function HomePage() {
                         fontSize: "1rem",
                       }}
                     />
+
                     <Button
                       variant="contained"
                       onClick={() => urunuOnayla(product.id)}

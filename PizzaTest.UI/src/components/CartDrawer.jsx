@@ -65,6 +65,17 @@ export default function CartDrawer({ open, onClose, cart, setCart }) {
     }
   };
 
+  const handleClearCart = async () => {
+    if (window.confirm("Sepeti temizlemek istediğinize emin misiniz?")) {
+      try {
+        await cartService.clearCart();
+        setCart([]);
+      } catch (err) {
+        console.error("Sepet temizlenemedi:", err);
+      }
+    }
+  };
+
   return (
     <Drawer
       anchor="right"
@@ -199,14 +210,31 @@ export default function CartDrawer({ open, onClose, cart, setCart }) {
         </Typography>
 
         <Box mt={2} display="flex" gap={1}>
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            onClick={handleCheckout}
-          >
-            Siparişi Ver
-          </Button>
+          <Stack direction={"row"} spacing={2} width="100%">
+            {cart.length > 0 ? (
+              <>
+                <Button
+                  variant="contained"
+                  color="error"
+                  fullWidth
+                  onClick={handleClearCart}
+                >
+                  Sepeti Temizle
+                </Button>
+
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  onClick={handleCheckout}
+                >
+                  Siparişi Ver
+                </Button>
+              </>
+            ) : (
+              <Typography>Sepetiniz Boş</Typography>
+            )}
+          </Stack>
         </Box>
       </Box>
     </Drawer>
