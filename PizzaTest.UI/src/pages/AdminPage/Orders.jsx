@@ -64,7 +64,7 @@ function Row({ order }) {
               <Table size="small" aria-label="order-details">
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={cellStyle}>\u00dcrün Adı</TableCell>
+                    <TableCell sx={cellStyle}>Ürün Adı</TableCell>
                     <TableCell sx={cellStyle}>Adet</TableCell>
                     <TableCell sx={cellStyle}>Birim Fiyatı</TableCell>
                     <TableCell sx={cellStyle}>Toplam Fiyat</TableCell>
