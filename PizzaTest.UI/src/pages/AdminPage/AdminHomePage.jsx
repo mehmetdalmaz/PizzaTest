@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { Grid, Paper, Typography, CircularProgress } from "@mui/material";
+import { Grid, Paper, Typography, CircularProgress, Box } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import CategoryIcon from "@mui/icons-material/Category";
 import { orderService } from "../../services/orderService";
 import { productService } from "../../services/productsService";
 import { categoryService } from "../../services/categoryService";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export default function AdminHomePage() {
   const [data, setData] = useState({
@@ -15,6 +17,8 @@ export default function AdminHomePage() {
   });
 
   const [loading, setLoading] = useState(true);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -67,40 +71,41 @@ export default function AdminHomePage() {
   }
 
   return (
-      <Grid container spacing={3}>
-          {stats.map((item, index) => (
-              <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  key={index}
-                  sx={{ display: "flex" }}   // <-- burası çok önemli
-              >
-                  <Paper
-                      elevation={3}
-                      sx={{
-                          p: 3,
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                          gap: 1,
-                          flexGrow: 1,           // <-- Paper kart yüksekliği esnek ve eşit olsun
-                          minHeight: 100,
-                          minWidth: 150,
-
-                      }}
-                  >
-                      {item.icon}
-                      <Typography variant="h6" fontWeight={600}>
-                          {item.title}
-                      </Typography>
-                      <Typography variant="h4" color="primary">
-                          {item.value}
-                      </Typography>
-                  </Paper>
-              </Grid>
-          ))}
-      </Grid>
+    <Grid container spacing={3} justifyContent="center">
+      {stats.map((item, index) => (
+        <Grid
+          item
+          key={index}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Paper
+            elevation={3}
+            sx={{
+              width: 260,
+              p: isMobile ? 2 : 3,
+              display: "flex",
+              flexDirection: isMobile ? "row" : "column",
+              alignItems: "center",
+              justifyContent: isMobile ? "flex-start" : "center",
+              gap: isMobile ? 2 : 1,
+              minHeight: 120,
+            }}
+          >
+            {item.icon}
+            <Box sx={{ textAlign: isMobile ? "left" : "center" }}>
+              <Typography variant="h6" fontWeight={600}>
+                {item.title}
+              </Typography>
+              <Typography variant="h4" color="primary">
+                {item.value}
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+      ))}
+    </Grid>
   );
 }

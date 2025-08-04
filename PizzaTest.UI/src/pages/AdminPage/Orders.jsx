@@ -15,6 +15,7 @@ import {
   Button,
   TextField,
   useMediaQuery,
+  Stack,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -41,8 +42,12 @@ function Row({ order }) {
         <TableCell sx={cellStyle}>
           {order.addressLine1}, {order.city}
         </TableCell>
-        <TableCell sx={cellStyle}>{new Date(order.orderDate).toLocaleString()}</TableCell>
-        <TableCell sx={cellStyle}>{new Date(order.deliveryDate).toLocaleString()}</TableCell>
+        <TableCell sx={cellStyle}>
+          {new Date(order.orderDate).toLocaleString()}
+        </TableCell>
+        <TableCell sx={cellStyle}>
+          {new Date(order.deliveryDate).toLocaleString()}
+        </TableCell>
         <TableCell sx={cellStyle}>{order.totalPrice.toFixed(2)} ₺</TableCell>
         <TableCell sx={cellStyle}>{order.orderNote || "-"}</TableCell>
       </TableRow>
@@ -55,7 +60,8 @@ function Row({ order }) {
                 Adres Detayları
               </Typography>
               <Typography variant="body2" gutterBottom>
-                {order.addressLine1}, {order.addressLine2}, {order.city}, {order.state}, {order.postalCode}, {order.country}
+                {order.addressLine1}, {order.addressLine2}, {order.city},{" "}
+                {order.state}, {order.postalCode}, {order.country}
               </Typography>
 
               <Typography variant="subtitle1" gutterBottom sx={{ mt: 2 }}>
@@ -75,8 +81,12 @@ function Row({ order }) {
                     <TableRow key={item.id}>
                       <TableCell sx={cellStyle}>{item.productName}</TableCell>
                       <TableCell sx={cellStyle}>{item.quantity}</TableCell>
-                      <TableCell sx={cellStyle}>{item.productPrice.toFixed(2)} ₺</TableCell>
-                      <TableCell sx={cellStyle}>{item.totalPrice.toFixed(2)} ₺</TableCell>
+                      <TableCell sx={cellStyle}>
+                        {item.productPrice.toFixed(2)} ₺
+                      </TableCell>
+                      <TableCell sx={cellStyle}>
+                        {item.totalPrice.toFixed(2)} ₺
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -224,25 +234,36 @@ export default function Orders() {
           inputProps={{ min: startDate || undefined }}
           sx={{ width: { xs: "100%", sm: "auto" }, fontSize: { xs: "0.8rem" } }}
         />
-        <Button variant="contained" onClick={handleFilter} sx={{ fontSize: { xs: "0.75rem" } }}>
-          Filtrele
-        </Button>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setStartDate("");
-            setEndDate("");
-            setFilteredOrders(orders);
-          }}
-          sx={{ fontSize: { xs: "0.75rem" } }}
-        >
-          Temizle
-        </Button>
+        <Stack direction={"row"} gap={2}>
+          <Button
+            variant="contained"
+            onClick={handleFilter}
+            sx={{ fontSize: { xs: "0.75rem" } }}
+          >
+            Filtrele
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              setStartDate("");
+              setEndDate("");
+              setFilteredOrders(orders);
+            }}
+            sx={{ fontSize: { xs: "0.75rem" } }}
+          >
+            Temizle
+          </Button>
+        </Stack>
       </Box>
 
       <TableContainer
         component={Paper}
-        sx={{ maxWidth: 1200, margin: "auto", marginTop: 2, px: { xs: 1, md: 0 } }}
+        sx={{
+          maxWidth: 1200,
+          margin: "auto",
+          marginTop: 2,
+          px: { xs: 1, md: 0 },
+        }}
       >
         <Typography
           variant="h5"
@@ -274,14 +295,21 @@ export default function Orders() {
                 </TableCell>
               </TableRow>
             ) : (
-              filteredOrders.map((order) => <Row key={order.id} order={order} />)
+              filteredOrders.map((order) => (
+                <Row key={order.id} order={order} />
+              ))
             )}
           </TableBody>
         </Table>
       </TableContainer>
 
       <Box display="flex" justifyContent="center" mt={2} px={{ xs: 1, md: 0 }}>
-        <Button variant="contained" color="success" onClick={exportToExcel} sx={{ fontSize: { xs: "0.75rem" } }}>
+        <Button
+          variant="contained"
+          color="success"
+          onClick={exportToExcel}
+          sx={{ fontSize: { xs: "0.75rem" } }}
+        >
           Excel'e Aktar
         </Button>
       </Box>

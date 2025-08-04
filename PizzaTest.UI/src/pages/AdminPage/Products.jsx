@@ -82,14 +82,14 @@ export default function Products() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-const [form, setForm] = useState({
-  name: "",
-  description: "",
-  price: "",
-  imageUrl: "",
-  stockQuantity: "",
-  categoryID: "",
-});
+  const [form, setForm] = useState({
+    name: "",
+    description: "",
+    price: "",
+    imageUrl: "",
+    stockQuantity: "",
+    categoryID: "",
+  });
   const [editingId, setEditingId] = useState(null);
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -116,62 +116,61 @@ const [form, setForm] = useState({
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  if (!form.name.trim()) {
-    alert("Ürün adı zorunlu");
-    return;
-  }
-
-  if (!form.price || isNaN(form.price) || Number(form.price) < 0) {
-    alert("Geçerli bir fiyat giriniz");
-    return;
-  }
-
-  if (!form.categoryID || isNaN(form.categoryID)) {
-    alert("Geçerli bir kategori ID giriniz");
-    return;
-  }
-
-  try {
-    const payload = {
-      name: form.name,
-      description: form.description,
-      price: parseFloat(form.price),
-      imageUrl: form.imageUrl,
-      stockQuantity: parseInt(form.stockQuantity),
-      categoryID: parseInt(form.categoryID),
-    };
-
-    if (editingId !== null) {
-      await productService.updateProduct(editingId, {
-        id: editingId,
-        ...payload,
-      });
-      alert("Ürün güncellendi.");
-    } else {
-      await productService.addProduct(payload);
-      alert("Ürün eklendi.");
+    if (!form.name.trim()) {
+      alert("Ürün adı zorunlu");
+      return;
     }
 
-    // Formu temizle
-    setForm({
-      name: "",
-      description: "",
-      price: "",
-      imageUrl: "",
-      stockQuantity: "",
-      categoryID: "",
-    });
-    setEditingId(null);
-    fetchProducts();
-  } catch (error) {
-    console.error(error.response?.data || error.message);
-    alert("İşlem başarısız oldu.");
-  }
-};
+    if (!form.price || isNaN(form.price) || Number(form.price) < 0) {
+      alert("Geçerli bir fiyat giriniz");
+      return;
+    }
 
+    if (!form.categoryID || isNaN(form.categoryID)) {
+      alert("Geçerli bir kategori ID giriniz");
+      return;
+    }
+
+    try {
+      const payload = {
+        name: form.name,
+        description: form.description,
+        price: parseFloat(form.price),
+        imageUrl: form.imageUrl,
+        stockQuantity: parseInt(form.stockQuantity),
+        categoryID: parseInt(form.categoryID),
+      };
+
+      if (editingId !== null) {
+        await productService.updateProduct(editingId, {
+          id: editingId,
+          ...payload,
+        });
+        alert("Ürün güncellendi.");
+      } else {
+        await productService.addProduct(payload);
+        alert("Ürün eklendi.");
+      }
+
+      // Formu temizle
+      setForm({
+        name: "",
+        description: "",
+        price: "",
+        imageUrl: "",
+        stockQuantity: "",
+        categoryID: "",
+      });
+      setEditingId(null);
+      fetchProducts();
+    } catch (error) {
+      console.error(error.response?.data || error.message);
+      alert("İşlem başarısız oldu.");
+    }
+  };
 
   const confirmDelete = (id) => {
     setDeleteId(id);
@@ -191,59 +190,57 @@ const [form, setForm] = useState({
     }
   };
 
-const handleEdit = (product) => {
-  setForm({
-    name: product.name || "",
-    description: product.description || "",
-    price: product.price?.toString() || "",
-    imageUrl: product.imageUrl || "",
-    stockQuantity: product.stockQuantity?.toString() || "",
-    categoryID: product.categoryID?.toString() || "",
-  });
-  setEditingId(product.id);
-};
+  const handleEdit = (product) => {
+    setForm({
+      name: product.name || "",
+      description: product.description || "",
+      price: product.price?.toString() || "",
+      imageUrl: product.imageUrl || "",
+      stockQuantity: product.stockQuantity?.toString() || "",
+      categoryID: product.categoryID?.toString() || "",
+    });
+    setEditingId(product.id);
+  };
 
-
-const handleCancel = () => {
-  setForm({
-    name: "",
-    description: "",
-    price: "",
-    imageUrl: "",
-    stockQuantity: "",
-    categoryID: "",
-  });
-  setEditingId(null);
-};
-
+  const handleCancel = () => {
+    setForm({
+      name: "",
+      description: "",
+      price: "",
+      imageUrl: "",
+      stockQuantity: "",
+      categoryID: "",
+    });
+    setEditingId(null);
+  };
 
   return (
-      <Box
-          sx={{
-          maxWidth: 700,
-          mx: "auto",
-          mt: 4,
-          p: 2,
+    <Box
+      sx={{
+        maxWidth: 700,
+        mx: "auto",
+        mt: 4,
+        p: 2,
 
-          // Mobilde padding ve margin azaltılıyor
+        // Mobilde padding ve margin azaltılıyor
+        "@media (max-width:600px)": {
+          maxWidth: "100%",
+          p: 1,
+          mx: 0,
+        },
+      }}
+    >
+      <Typography
+        variant="h4"
+        component="h2"
+        gutterBottom
+        sx={{
+          // Mobilde yazı biraz küçültülebilir
           "@media (max-width:600px)": {
-              maxWidth: "100%",
-              p: 1,
-              mx: 0,
+            fontSize: "1.5rem",
+            px: 1,
           },
-      }}
-      >
-       <Typography
-           variant="h4"
-           component="h2"
-           gutterBottom
-           sx={{
-           // Mobilde yazı biraz küçültülebilir
-           "@media (max-width:600px)": {
-                 fontSize: "1.5rem",
-                  px: 1,
-           },
-      }}
+        }}
       >
         Ürünler
       </Typography>
@@ -254,62 +251,62 @@ const handleCancel = () => {
         </Box>
       )}
       {error && (
-        <Typography 
-        color="error"
-        sx={{
+        <Typography
+          color="error"
+          sx={{
             mb: 2,
             px: 1,
-            fontSize:{xs:"0.9rem",md:"inherit"},
-        }}
+            fontSize: { xs: "0.9rem", md: "inherit" },
+          }}
         >
           {error}
         </Typography>
       )}
 
       <TableContainer
-      component={Paper} 
-      sx={{ 
+        component={Paper}
+        sx={{
           mb: 3,
           width: "100%",
           overflowX: "hidden", // Mobilde kaydırma kapalı
           "@media (max-width:600px)": {
-              overflowX: "hidden",
-          },
-          }}
-          >
-        <Table
-        aria-label="products table"
-        sx={{
-          // Table genişliği %100 mobilde ve masaüstünde
-          width: "100%",
-          // Mobilde hücre padding küçültülebilir
-          "@media (max-width:600px)": {
-            "& td, & th": {
-              padding: "6px 8px",
-              fontSize: "0.8rem",
-              whiteSpace: "nowrap", // Metni tek satır yapar
-              overflow: "hidden",
-              textOverflow: "ellipsis", // Uzun metinleri ... yapar
-              maxWidth: "100px", // Sütun genişliği sınırı (opsiyonel)
-              },
-            // İşlemler sütunu için genişlik biraz artır
-      "& th:last-child, & td:last-child": {
-        maxWidth: "150px",
-        whiteSpace: "normal", // satır kayması için
-      },
+            overflowX: "hidden",
           },
         }}
+      >
+        <Table
+          aria-label="products table"
+          sx={{
+            // Table genişliği %100 mobilde ve masaüstünde
+            width: "100%",
+            // Mobilde hücre padding küçültülebilir
+            "@media (max-width:600px)": {
+              "& td, & th": {
+                padding: "6px 8px",
+                fontSize: "0.8rem",
+                whiteSpace: "nowrap", // Metni tek satır yapar
+                overflow: "hidden",
+                textOverflow: "ellipsis", // Uzun metinleri ... yapar
+                maxWidth: "100px", // Sütun genişliği sınırı (opsiyonel)
+              },
+              // İşlemler sütunu için genişlik biraz artır
+              "& th:last-child, & td:last-child": {
+                maxWidth: "150px",
+                whiteSpace: "normal", // satır kayması için
+              },
+            },
+          }}
         >
           <TableHead>
             <TableRow>
-            <TableCell sx={{ width: 30 }} />
-            <TableCell sx={{ width: 40 }}>ID</TableCell>
-            <TableCell sx={{ width: 100 }}>Kategori Adı</TableCell>
-            <TableCell sx={{ width: 120 }}>Ürün Adı</TableCell>
-            <TableCell sx={{ width: 70 }}>Fiyat</TableCell>
-            <TableCell align="right" sx={{ width: 90 }}>
-              İşlemler
-            </TableCell>
+              <TableCell sx={{ width: 30 }} />
+              <TableCell sx={{ width: 40 }}>ID</TableCell>
+              <TableCell sx={{ width: 100 }}>Kategori Adı</TableCell>
+              <TableCell sx={{ width: 120 }}>Ürün Adı</TableCell>
+              <TableCell sx={{ width: 70 }}>Fiyat</TableCell>
+              <TableCell align="right" sx={{ width: 90 }}>
+                İşlemler
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -333,11 +330,13 @@ const handleCancel = () => {
         </Table>
       </TableContainer>
 
-      <Typography variant="h5" gutterBottom
-       sx={{
-        px: { xs: 1, md: 0 },
-        fontSize: { xs: "1.25rem", md: "inherit" },
-      }}
+      <Typography
+        variant="h5"
+        gutterBottom
+        sx={{
+          px: { xs: 1, md: 0 },
+          fontSize: { xs: "1.25rem", md: "inherit" },
+        }}
       >
         {editingId !== null ? "Ürün Güncelle" : "Yeni Ürün Ekle"}
       </Typography>
@@ -376,7 +375,7 @@ const handleCancel = () => {
             required
             fullWidth
           />
-           <TextField
+          <TextField
             label="Stok Adedi"
             name="stockQuantity"
             value={form.stockQuantity}
@@ -385,7 +384,7 @@ const handleCancel = () => {
             inputProps={{ min: "0" }}
             fullWidth
           />
-           <TextField
+          <TextField
             label="Resim URL"
             name="imageUrl"
             value={form.imageUrl}
@@ -401,7 +400,6 @@ const handleCancel = () => {
             inputProps={{ min: "1" }}
             fullWidth
           />
-
 
           <Stack direction="row" spacing={2}>
             <Button variant="contained" type="submit">
