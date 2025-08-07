@@ -199,12 +199,15 @@ export default function Orders() {
           Adres: `${order.addressLine1}, ${order.city}`,
           "Sipariş Tarihi": new Date(order.orderDate).toLocaleString(),
           "Teslim Tarihi": new Date(order.deliveryDate).toLocaleString(),
-          "Toplam Tutar (₺)": order.totalPrice,
+          "Toplam Tutar (₺)": (order.totalPrice?.toFixed(2) || "0.00").replace(
+            ".",
+            ","
+          ),
           Not: order.orderNote || "-",
-          "\u00dcr\u00fcn Adı": item.productName,
+          "Ürün Adı": item.productName,
           Adet: item.quantity,
-          "Birim Fiyatı (₺)": item.productPrice.toFixed(2),
-          "Toplam Fiyat (₺)": item.totalPrice.toFixed(2),
+          "Birim Fiyatı (₺)": item.productPrice.toFixed(2).replace(".", ","),
+          "Toplam Fiyat (₺)": item.totalPrice.toFixed(2).replace(".", ","),
         });
       });
     });
