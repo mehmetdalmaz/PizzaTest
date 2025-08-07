@@ -197,17 +197,14 @@ export default function Orders() {
           "Kullanıcı ID": order.userID,
           "Ad Soyad": `${order.userName} ${order.userSurname}`,
           Adres: `${order.addressLine1}, ${order.city}`,
-          "Sipariş Tarihi": new Date(order.orderDate).toLocaleString(),
-          "Teslim Tarihi": new Date(order.deliveryDate).toLocaleString(),
-          "Toplam Tutar (₺)": (order.totalPrice?.toFixed(2) || "0.00").replace(
-            ".",
-            ","
-          ),
+          "Sipariş Tarihi": new Date(order.orderDate).toLocaleString("tr-TR"),
+          "Teslim Tarihi": new Date(order.deliveryDate).toLocaleString("tr-TR"),
+          "Toplam Tutar (₺)": Number(order.totalPrice),
           Not: order.orderNote || "-",
           "Ürün Adı": item.productName,
           Adet: item.quantity,
-          "Birim Fiyatı (₺)": item.productPrice.toFixed(2).replace(".", ","),
-          "Toplam Fiyat (₺)": item.totalPrice.toFixed(2).replace(".", ","),
+          "Birim Fiyatı (₺)": Number(item.productPrice),
+          "Toplam Fiyat (₺)": Number(item.totalPrice),
         });
       });
     });
@@ -215,6 +212,26 @@ export default function Orders() {
     const worksheet = XLSX.utils.json_to_sheet(excelData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Siparişler Detaylı");
+
+    const columnsToFormat = [
+      "Toplam Tutar (₺)",
+      "Birim Fiyatı (₺)",
+      "Toplam Fiyat (₺)",
+    ];
+    const range = XLSX.utils.decode_range(worksheet["!ref"]);
+
+    for (let R = range.s.r + 1; R <= range.e.r; ++R) {
+      for (let C = range.s.c; C <= range.e.c; ++C) {
+        const cellRef = XLSX.utils.encode_cell({ c: C, r: R });
+        const headerCellRef = XLSX.utils.encode_cell({ c: C, r: 0 });
+        const header = worksheet[headerCellRef]?.v;
+
+        if (columnsToFormat.includes(header) && worksheet[cellRef]) {
+          worksheet[cellRef].t = "n";
+          worksheet[cellRef].z = "#,##0.00";
+        }
+      }
+    }
 
     const excelBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
