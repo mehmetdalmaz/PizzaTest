@@ -278,6 +278,14 @@ export default function Orders() {
           >
             Temizle
           </Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={exportToExcel}
+            sx={{ fontSize: { xs: "0.75rem" } }}
+          >
+            Excel'e Aktar
+          </Button>
         </Stack>
       </Box>
 
@@ -327,17 +335,6 @@ export default function Orders() {
           </TableBody>
         </Table>
       </TableContainer>
-
-      <Box display="flex" justifyContent="center" mt={2} px={{ xs: 1, md: 0 }}>
-        <Button
-          variant="contained"
-          color="success"
-          onClick={exportToExcel}
-          sx={{ fontSize: { xs: "0.75rem" } }}
-        >
-          Excel'e Aktar
-        </Button>
-      </Box>
     </>
   );
 }
